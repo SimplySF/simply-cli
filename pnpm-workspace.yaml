@@ -1,9 +1,9 @@
 packages:
   - 'packages/*'
-  - 'site'
 onlyBuiltDependencies:
   - nx
 allowBuilds:
+  yarn: false
   esbuild: true
   nx: true
   unrs-resolver: true
