@@ -50,8 +50,8 @@
       "@oclif/plugin-plugins"
     ],
     "jitPlugins": {
-      "@simplysf/simply-atlassian": "^1.0.0",
-      "@simplysf/simply-gitlab": "^1.0.0"
+      "@simplysf/simply-atlassian": ">=0.11.0 <1.0.0",
+      "@simplysf/simply-gitlab": ">=0.4.0 <1.0.0"
     },
     "topicSeparator": " ",
     "topics": {
