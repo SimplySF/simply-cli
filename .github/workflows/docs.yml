@@ -1,0 +1,76 @@
+name: docs
+
+# Most of this site is not in this repo. `site/scripts/sync-products.mjs` downloads the published
+# product tarballs from npm and generates the reference pages and guides from what it finds inside
+# them, so the site changes when a product is released, not when this repo does. That is why there
+# is a schedule below: without it, a product release would sit unpublished until someone happened
+# to push here.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'site/**'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    paths:
+      - 'site/**'
+      - '.github/workflows/docs.yml'
+  schedule:
+    # Daily, so a product release reaches the site within a day with no action here.
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/setup@v2
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 'lts/*'
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+
+      # `prebuild` runs the sync script, which shells out to `npm pack` for each product package.
+      # This step needs network access to the npm registry.
+      - run: pnpm --filter site run build
+
+      - name: Check for broken internal links
+        run: |
+          pnpm --filter site run preview &
+          npx --yes wait-on http://localhost:4321/simply-cli/
+          pnpm exec linkinator http://localhost:4321/simply-cli/ --recurse --skip "^https?://(?!localhost)"
+
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site/dist
+
+  deploy:
+    # Deploys on a push to main, on the schedule, or on a manual run — always gated to main so a
+    # manual run against another ref can never publish it.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/configure-pages@v5
+      - id: deployment
+        uses: actions/deploy-pages@v4

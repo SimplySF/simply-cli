@@ -1,0 +1,77 @@
+---
+title: Simply CLI
+description: SimplySF's command-line tools under one command, with the same capabilities available to AI agents over MCP.
+template: splash
+hero:
+  tagline: One command for GitLab and Atlassian. Install simply once; each product CLI installs itself the first time you use it. Human-readable at a terminal, raw JSON for scripts, and the same capabilities as MCP tools for agents.
+  image:
+    alt: Simply SF logo — a stylized cloud
+    light: ../../assets/logo-full.png
+    dark: ../../assets/logo-full-dark.png
+  # Hero actions are frontmatter, not markdown body content, so remark-base-links cannot rewrite
+  # them — the /simply-cli prefix here is kept in sync with `base` in astro.config.mjs by hand.
+  actions:
+    - text: Get Started
+      link: /simply-cli/getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: GitLab commands
+      link: /simply-cli/gitlab/reference/
+      icon: open-book
+      variant: secondary
+    - text: Atlassian commands
+      link: /simply-cli/atlassian/reference/
+      icon: open-book
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## One install
+
+```sh
+npm install -g @simplysf/simply-cli
+
+simply gitlab mr list --project group/project
+# Installing @simplysf/simply-gitlab to run gitlab:mr:list (first run only)…
+
+simply atlassian jira issue search --jql "project = PROJ AND statusCategory != Done"
+```
+
+`simply --help` lists every product topic whether or not it is installed, so you can find a command
+before anything is downloaded.
+
+<CardGrid>
+  <Card title="GitLab" icon="seti:git">
+    Projects, merge requests, repository files, commits and diffs, branches, tags, releases, CI jobs and logs, search —
+    and configuration baselines that hold many projects to one standard. [Commands](/gitlab/reference/) · [Get
+    started](/gitlab/)
+  </Card>
+  <Card title="Atlassian" icon="document">
+    Jira issues, comments with @-mentions, issue links, users, boards and sprints, and Confluence pages.
+    [Commands](/atlassian/reference/) · [Get started](/atlassian/)
+  </Card>
+  <Card title="Installed on demand" icon="rocket">
+    The host declares what exists but depends on none of it. A product is fetched the first time one of its commands
+    runs, and updates on its own release schedule. [How it works](/guides/plugins/)
+  </Card>
+  <Card title="MCP servers" icon="puzzle">
+    `simply gitlab mcp` and `simply atlassian mcp` serve the same capabilities to Claude, Cursor, Gemini, or any MCP
+    client — read-only unless you opt into writes. [Guide](/guides/mcp/)
+  </Card>
+</CardGrid>
+
+## Why one command
+
+Each product CLI used to own `simply` itself, which meant only one could be installed at a time —
+npm links one binary name to one package. A single host now owns the name and the products are
+plugins, so they coexist, and adding a third changes nothing about the first two.
+
+Your commands did not change. `simply gitlab mr list` and `simply atlassian jira issue view PROJ-42`
+are what they always were.
+
+## Related
+
+Simply CLI is one of [SimplySF](https://github.com/SimplySF)'s toolsets, alongside the
+[Salesforce CLI plugins](https://simplysf.github.io/simply-plugins/) and the
+[Node libraries](https://simplysf.github.io/simply-node/) behind them.

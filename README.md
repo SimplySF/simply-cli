@@ -5,6 +5,8 @@
 `simply` is the command that hosts [SimplySF](https://github.com/SimplySF)'s product command-line
 tools. Install it once; the product CLIs install themselves the first time you use one.
 
+**Documentation: https://simplysf.github.io/simply-cli/**
+
 ```sh
 npm install -g @simplysf/simply-cli
 
@@ -27,10 +29,12 @@ the products are plugins, so they coexist, and adding a third changes nothing ab
 
 ## What it hosts
 
-| Plugin                                                                       | Commands                                                   |
-| ---------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| [`@simplysf/simply-atlassian`](https://github.com/SimplySF/simply-atlassian) | `simply atlassian jira …`, `simply atlassian confluence …` |
-| [`@simplysf/simply-gitlab`](https://github.com/SimplySF/simply-gitlab)       | `simply gitlab …`                                          |
+| Plugin                                                                           | Commands                                                   |
+| -------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| [`@simplysf/simply-atlassian`](https://github.com/SimplySF/simply-atlassian)     | `simply atlassian jira …`, `simply atlassian confluence …` |
+| [`@simplysf/simply-atlassian-mcp`](https://github.com/SimplySF/simply-atlassian) | `simply atlassian mcp`                                     |
+| [`@simplysf/simply-gitlab`](https://github.com/SimplySF/simply-gitlab)           | `simply gitlab …`                                          |
+| [`@simplysf/simply-gitlab-mcp`](https://github.com/SimplySF/simply-gitlab)       | `simply gitlab mcp`                                        |
 
 `simply --help` lists both topics whether or not they are installed — the command list ships with
 the host, so you can discover a command before anything is fetched.
@@ -80,13 +84,13 @@ The host declares which version of each product it will install:
 
 ```json
 "jitPlugins": {
-  "@simplysf/simply-atlassian": "^1.0.0",
-  "@simplysf/simply-gitlab": "^1.0.0"
+  "@simplysf/simply-atlassian": ">=0.11.0 <1.0.0",
+  "@simplysf/simply-gitlab": ">=0.4.0 <1.0.0"
 }
 ```
 
-A product can ship as many minor and patch releases as it likes without the host moving. A new major
-needs a host release to widen the range, which is the one place the two are genuinely coupled.
+A product can ship as many releases inside its range as it likes without the host moving. Leaving
+the range needs a host release, which is the one place the two are genuinely coupled.
 
 ## Issues
 
@@ -94,6 +98,14 @@ Report anything about the `simply` command itself at
 https://github.com/SimplySF/simply-cli/issues. For a problem with a specific command, the product
 repo is the better place — [simply-atlassian](https://github.com/SimplySF/simply-atlassian/issues)
 or [simply-gitlab](https://github.com/SimplySF/simply-gitlab/issues).
+
+## Documentation
+
+https://simplysf.github.io/simply-cli/ covers `simply` and every product it hosts: the command
+reference for each, the guides that ship with each package, and how to configure the MCP servers.
+
+It is built from the **published** packages, so it describes the versions people actually have
+installed rather than whatever is on `main`.
 
 ## Contributing
 
