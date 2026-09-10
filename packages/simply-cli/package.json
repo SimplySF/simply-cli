@@ -1,0 +1,160 @@
+{
+  "name": "@simplysf/simply-cli",
+  "description": "The simply command: a host for SimplySF product CLIs, installed on demand",
+  "version": "0.1.0",
+  "author": "@ClayChipps",
+  "homepage": "https://github.com/SimplySF/simply-cli",
+  "bugs": "https://github.com/SimplySF/simply-cli/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SimplySF/simply-cli",
+    "directory": "packages/simply-cli"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "files": [
+    "/lib",
+    "/oclif.manifest.json"
+  ],
+  "keywords": [
+    "oclif",
+    "cli",
+    "gitlab",
+    "atlassian",
+    "jira",
+    "confluence",
+    "simply"
+  ],
+  "license": "Apache-2.0",
+  "exports": "./lib/index.js",
+  "type": "module",
+  "types": "./lib/index.d.ts",
+  "bin": {
+    "simply": "./bin/run.js"
+  },
+  "oclif": {
+    "additionalVersionFlags": [
+      "-v"
+    ],
+    "additionalHelpFlags": [
+      "-h"
+    ],
+    "bin": "simply",
+    "dirname": "simply",
+    "flexibleTaxonomy": true,
+    "hooks": {
+      "jit_plugin_not_installed": "./lib/hooks/jit-plugin-not-installed.js"
+    },
+    "plugins": [
+      "@oclif/plugin-plugins"
+    ],
+    "jitPlugins": {
+      "@simplysf/simply-atlassian": "^1.0.0",
+      "@simplysf/simply-gitlab": "^1.0.0"
+    },
+    "topicSeparator": " ",
+    "topics": {
+      "atlassian": {
+        "description": "Work with Atlassian products. Installed on first use."
+      },
+      "gitlab": {
+        "description": "Work with GitLab. Installed on first use."
+      }
+    }
+  },
+  "dependencies": {
+    "@oclif/core": "^4.11.2",
+    "@oclif/plugin-plugins": "^5.4.53"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.10",
+    "vitest": "^4.1.10"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "wireit",
+    "compile": "wireit",
+    "fix-license": "eslint src test --fix --rule \"header/header: [2]\"",
+    "format": "wireit",
+    "lint": "wireit",
+    "manifest": "oclif manifest --jit",
+    "test": "wireit",
+    "test:only": "wireit",
+    "test:watch": "vitest watch --project simply-cli"
+  },
+  "wireit": {
+    "build": {
+      "dependencies": [
+        "compile",
+        "lint"
+      ]
+    },
+    "compile": {
+      "command": "tsc -p . --pretty --incremental",
+      "files": [
+        "src/**/*.ts",
+        "**/tsconfig.json",
+        "../../tsconfig.json"
+      ],
+      "output": [
+        "lib/**",
+        "*.tsbuildinfo"
+      ],
+      "clean": "if-file-deleted"
+    },
+    "format": {
+      "command": "prettier --write \"+(src|test)/**/*.+(ts|js|json)\"",
+      "files": [
+        "src/**/*.ts",
+        "test/**/*.ts",
+        ".prettier*"
+      ],
+      "output": []
+    },
+    "lint": {
+      "command": "eslint src test --color --cache --cache-location .eslintcache",
+      "files": [
+        "src/**/*.ts",
+        "test/**/*.ts",
+        "**/.eslint*",
+        "**/tsconfig.json",
+        "../../eslint.config.mjs",
+        "../../tsconfig.json"
+      ],
+      "output": []
+    },
+    "test": {
+      "dependencies": [
+        "test:compile",
+        "test:only",
+        "lint"
+      ]
+    },
+    "test:compile": {
+      "command": "tsc -p \"./test\" --pretty",
+      "files": [
+        "test/**/*.ts",
+        "**/tsconfig.json",
+        "../../tsconfig.json"
+      ],
+      "output": []
+    },
+    "test:only": {
+      "command": "vitest run --project simply-cli",
+      "env": {
+        "FORCE_COLOR": "2"
+      },
+      "files": [
+        "test/**/*.ts",
+        "src/**/*.ts",
+        "**/tsconfig.json",
+        "../../tsconfig.json",
+        "vitest.config.ts"
+      ],
+      "output": []
+    }
+  }
+}
