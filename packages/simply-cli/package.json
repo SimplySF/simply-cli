@@ -71,6 +71,8 @@
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.1.10",
+    "oclif": "^4.23.0",
+    "shx": "^0.4.0",
     "vitest": "^4.1.10"
   },
   "publishConfig": {
@@ -83,6 +85,8 @@
     "format": "wireit",
     "lint": "wireit",
     "manifest": "oclif manifest --jit",
+    "postpack": "shx rm -f oclif.manifest.json",
+    "prepack": "pnpm run compile && pnpm run manifest",
     "test": "wireit",
     "test:only": "wireit",
     "test:watch": "vitest watch --project simply-cli"
