@@ -14,15 +14,17 @@ Thanks for your interest in contributing to Simply CLI! This document covers the
 
 ## Repository Structure
 
-This repository is a Lerna monorepo holding the CLI package, the library package it is built on, and
-an MCP server package. Every package has its own `CONTRIBUTING.md` covering what is specific to it —
-read this file first, then that one.
+This repository is a Lerna monorepo with a single package: the host that owns the `simply` command.
+Every package has its own `CONTRIBUTING.md` covering what is specific to it — read this file first,
+then that one.
 
-| Package                                                 | Description                                                                                |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| [`@simplysf/simply-cli`](packages/simply-cli)           | The `simply gitlab` CLI                                                                    |
-| [`@simplysf/simply-cli-core`](packages/simply-cli-core) | Configuration, auth, the HTTP client, and shared logic the CLI and MCP server are built on |
-| [`@simplysf/simply-cli-mcp`](packages/simply-cli-mcp)   | MCP server exposing GitLab to AI agents, one tool per CLI command                          |
+| Package                                       | Description                                                                          |
+| --------------------------------------------- | ------------------------------------------------------------------------------------ |
+| [`@simplysf/simply-cli`](packages/simply-cli) | The `simply` command: the JIT plugin hook, the plugin declarations, and nothing else |
+
+The product commands live in their own repos ([simply-atlassian](https://github.com/SimplySF/simply-atlassian),
+[simply-gitlab](https://github.com/SimplySF/simply-gitlab)) and are installed on demand. See
+[AGENTS.md](AGENTS.md) for the contract between the host and a plugin.
 
 Tooling:
 
@@ -33,7 +35,7 @@ Tooling:
 - **Node:** ^22.13.0 || ^24.0.0 || ^26.0.0 (required by Lerna 10; the published CLI itself only requires >=22.0.0)
 - **Docs site:** [Astro Starlight](https://starlight.astro.build/), deployed to GitHub Pages
 
-There's also a top-level [`site/`](site) directory — the documentation site. It's part of the pnpm workspace (so `pnpm install` at the root sets it up too), but it's not a `packages/*` entry, so Lerna never versions, publishes, or runs `build`/`test`/`lint` scripts against it. See [Documentation Site](#documentation-site) below for how to work on it.
+There's also a top-level [`site/`](site) directory — the combined documentation site for `simply` and every product it hosts. It's part of the pnpm workspace (so `pnpm install` at the root sets it up too), but it's not a `packages/*` entry, so Lerna never versions, publishes, or runs `build`/`test`/`lint` scripts against it. See [Documentation Site](#documentation-site) below for how to work on it.
 
 ## Setup
 
@@ -123,9 +125,7 @@ If your change only affects one package, scope the commit to it, e.g. `feat(simp
 - If the change has a design document in [`docs/design/`](docs/design/README.md), update it to match what actually shipped, including its `Status` line and its row in the index. A design doc that quietly disagrees with the code is worse than none.
 - Make sure `pnpm run build` and `pnpm test` pass before opening the PR. CI runs both across every package; the pre-push hook runs the same checks but scoped to packages changed since the last release tag (see [Git Hooks](#git-hooks)), so a passing push doesn't guarantee a passing PR if your branch touches a root-level config file (e.g. `tsconfig.json`, `eslint.config.mjs`) that no single package's directory reflects.
 - Aim for high test coverage on new code.
-- Update the relevant package's README/command docs if you changed a command's flags or behavior: run `pnpm run readme` in `packages/simply-cli` and commit the result. Nothing local enforces this, and CI does not catch a stale README.
-- If the change affects credentials, write safety, the `--json`/exit-code contract, or the MCP server, update the matching hand-written guide under `site/src/content/docs/guides/` (see [Documentation Site](#documentation-site)).
-- If you added a CLI command, add the matching MCP tool. `packages/simply-cli-mcp/test/tools.test.ts` cross-checks the catalogue against `command-snapshot.json` in both directions, so this one CI does catch.
+- If the change affects installation, the JIT plugin flow, or how the MCP servers are configured, update the matching guide under `site/src/content/docs/` (see [Documentation Site](#documentation-site)).
 - `command-snapshot.json` (used to flag accidental breaking changes to commands/flags) regenerates automatically as part of each package's `pnpm run build` — just commit whatever changes. CI re-verifies with `git diff --exit-code` after `pnpm run build`, so a stale, uncommitted snapshot fails the build.
 
 ## Versioning and Publishing
@@ -134,11 +134,11 @@ Versioning uses Lerna's independent mode — each package has its own version an
 
 ## CI
 
-| Workflow      | Trigger                                                                                  | What it does                                                                                  |
-| ------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `test.yml`    | Push to non-main branches                                                                | Runs `pnpm run build` + `pnpm test` on Linux (lts/_, lts/-1) and Windows (lts/_)              |
-| `release.yml` | Push to `main` or `prerelease/**`, or manual dispatch                                    | Builds, tests, versions from conventional commits with Lerna, and publishes to npm            |
-| `docs.yml`    | Push/PR touching `site/**` or a package's `README.md`/`package.json`, or manual dispatch | Builds the docs site, checks for broken internal links, and deploys to GitHub Pages on `main` |
+| Workflow      | Trigger                                                          | What it does                                                                                  |
+| ------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `test.yml`    | Push to non-main branches                                        | Runs `pnpm run build` + `pnpm test` on Linux (lts/_, lts/-1) and Windows (lts/_)              |
+| `release.yml` | Push to `main` or `prerelease/**`, or manual dispatch            | Builds, tests, versions from conventional commits with Lerna, and publishes to npm            |
+| `docs.yml`    | Push/PR touching `site/**`, a daily schedule, or manual dispatch | Builds the docs site, checks for broken internal links, and deploys to GitHub Pages on `main` |
 
 ## Git Hooks
 
@@ -153,6 +153,43 @@ dependents) to keep the hook fast locally — CI (`test.yml`) always runs `pnpm 
 across every package, so nothing changed here reduces what actually gates a merge.
 
 Hooks are installed automatically on `pnpm install` via the `prepare: husky` script.
+
+## Documentation Site
+
+[`site/`](site) builds https://simplysf.github.io/simply-cli/ — one site covering `simply` and every
+product it hosts.
+
+**Most of its content is not in this repo.** `site/scripts/sync-products.mjs` runs before every
+build (`prebuild`), downloads each product's **published** npm tarball, and generates the pages
+under `/gitlab/` and `/atlassian/` from the `oclif.manifest.json` and `docs/guides/` it finds
+inside. Nothing under those paths is committed here, and editing it locally is pointless — the next
+build overwrites it. To change a product's docs, change them in that product's repo; they reach the
+site when that package is **released**. [`docs/design/0002`](docs/design/0002-combined-documentation-site.md)
+explains why it works this way.
+
+What _is_ editable here is everything else in `site/src/content/docs/`: the landing page, Get
+Started, and the `guides/` covering the host itself.
+
+```sh
+pnpm --filter site run dev      # sync from npm, then serve with hot reload
+pnpm --filter site run build    # sync, then build to site/dist
+pnpm --filter site run sync     # regenerate the product pages only
+```
+
+`sync` needs network access to the npm registry.
+
+Two rules the link check will otherwise catch for you in CI:
+
+- **Hand-written pages may only link to `/{product}/` and `/{product}/reference/`.** Those are
+  generated on every build. A guide page is only there once that product has released it, so a link
+  straight to one is a link this repo cannot keep working.
+- **Never hand-write a page under `/gitlab/` or `/atlassian/`.** It will be deleted on the next
+  sync.
+
+Root-relative links in markdown are rewritten with the `/simply-cli` base path by
+`site/plugins/remark-base-links.mjs`, so write `/guides/plugins/`, not `/simply-cli/guides/plugins/`.
+That plugin only sees markdown body content — the hero actions in `index.mdx` are frontmatter and
+carry the prefix by hand.
 
 ## Reporting Issues
 
