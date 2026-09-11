@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.2.0...%40simplysf%2Fsimply-cli%400.3.0) (2026-09-11)
+
+### Features
+
+- host the MCP servers as jit plugins too ([8b50dfc](https://github.com/SimplySF/simply-cli/commit/8b50dfc2c5e142dd4b81a38d2c2dadbe014286f9))
+
 # 0.2.0 (2026-09-10)
 
 ### Bug Fixes
