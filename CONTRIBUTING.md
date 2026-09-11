@@ -187,7 +187,7 @@ Two rules the link check will otherwise catch for you in CI:
   sync.
 
 Root-relative links in markdown are rewritten with the `/simply-cli` base path by
-`site/plugins/remark-base-links.mjs`, so write `/guides/plugins/`, not `/simply-cli/guides/plugins/`.
+`site/plugins/remark-base-links.mjs`, so write `/quick-start/mcp/`, not `/simply-cli/quick-start/mcp/`.
 That plugin only sees markdown body content — the hero actions in `index.mdx` are frontmatter and
 carry the prefix by hand.
 

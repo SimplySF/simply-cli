@@ -1,6 +1,6 @@
 // Astro/Starlight don't rewrite root-relative links written in markdown prose to account for
 // the configured `base` (only Starlight's own generated nav does that). This walks the markdown
-// AST and prefixes any same-site, root-relative link (e.g. `/getting-started/`) with `base`, so
+// AST and prefixes any same-site, root-relative link (e.g. `/quick-start/`) with `base`, so
 // hand-authored content can keep using clean root-relative links regardless of where the site is
 // deployed.
 export function remarkBaseLinks(base) {
