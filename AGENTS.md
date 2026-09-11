@@ -38,8 +38,22 @@ of it. **A plugin that does not ship its own manifest cannot be JIT-installed** 
 fails, and without a manifest entry the command is never found, so the hook never fires. Both
 product packages therefore generate a manifest in `prepack`.
 
-This is also why the manifest step lives in `release.yml` rather than in `build`: it needs the
-plugins to be published at the declared range, and it needs network.
+This host generates its own manifest in `prepack` too, for a reason worth stating: the manifest
+records the version it was generated from, and `@oclif/core` **discards a manifest whose version
+does not match the `package.json` beside it** (with only a `process.emitWarning`). For a plugin
+that has commands of its own the fallback is a filesystem scan, so the damage is invisible. This
+package has no commands of its own, so discarding the manifest discards every JIT command at once
+and `simply --help` falls back to listing `plugins` alone.
+
+Generating it at pack time is what binds it to the version being published. Building it in a
+release step of its own is what broke `simply atlassian mcp` and `simply gitlab mcp` in 0.3.0: the
+step ran before `lerna version`, so a 0.2.0 manifest shipped inside a 0.3.0 package and every JIT
+command vanished. The failure was invisible from the product side, because installing
+`@simplysf/simply-atlassian` explicitly brings its own manifest and its commands work fine -- only
+the two MCP packages, which are JIT-only, had no other way in.
+
+It is not part of `build` because it needs network and needs the plugins already published at the
+declared ranges.
 
 ## Adding a product CLI
 
@@ -76,7 +90,8 @@ Two consequences worth stating, because both are easy to violate and only CI cat
 - Node 22+, TypeScript ESM, oclif, pnpm, lerna, wireit — the same as `simply-atlassian` and
   `simply-gitlab`, so tooling knowledge carries over.
 - `pnpm run build` compiles and lints. `pnpm test` is the full gate.
-- `pnpm --filter @simplysf/simply-cli run manifest` builds the JIT manifest. It shells out to `tar`
-  and is only run on Linux CI; it is not part of the local build.
+- `pnpm --filter @simplysf/simply-cli run manifest` builds the JIT manifest. It shells out to `npm
+pack` and `tar` and needs network, so it is not part of the local build; `prepack` runs it at
+  publish time, and nothing else should.
 - `pnpm --filter site run build` builds the docs site. It hits the npm registry, so it needs
   network; it is not part of `pnpm run build` or `pnpm test`.

@@ -51,12 +51,6 @@ jobs:
 
       - run: pnpm test
 
-      # Folds every jitPlugins command manifest into oclif.manifest.json, so `simply --help`
-      # lists the product topics before anything is installed. It downloads each plugin tarball,
-      # so those plugins must already be published at the declared range.
-      - name: Build the JIT manifest
-        run: pnpm --filter @simplysf/simply-cli run manifest
-
       - name: Version (release)
         if: github.event_name == 'push' && github.ref_name == 'main'
         run: pnpm exec lerna version --conventional-commits --create-release github --yes
@@ -73,6 +67,13 @@ jobs:
       # unconditional (not gated on the version steps above having run): this makes it self-healing
       # if a *previous* run's version step succeeded (git tagged/pushed) but its npm publish step
       # failed partway through a batch, since lerna version and npm publish are not atomic together.
+      # simply-cli's prepack runs `oclif manifest --jit` here, which downloads every jitPlugins
+      # tarball, so those plugins must already be published at the declared ranges. It has to run
+      # at pack time rather than as a step of its own: the manifest stamps the version it was
+      # generated from, and @oclif/core discards a manifest whose version does not match the
+      # package.json it ships beside -- which, for a host CLI with no commands of its own, means
+      # discarding every JIT command. Generating it before `lerna version` published a 0.2.0
+      # manifest inside simply-cli 0.3.0 and took `simply atlassian mcp` off the map entirely.
       - name: Publish
         run: pnpm exec lerna publish from-package --yes
         env:
