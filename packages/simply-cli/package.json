@@ -1,7 +1,7 @@
 {
   "name": "@simplysf/simply-cli",
   "description": "The simply command: a host for SimplySF product CLIs, installed on demand",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "@ClayChipps",
   "homepage": "https://github.com/SimplySF/simply-cli",
   "bugs": "https://github.com/SimplySF/simply-cli/issues",

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.3.0...%40simplysf%2Fsimply-cli%400.3.1) (2026-09-11)
+
+### Bug Fixes
+
+- generate the JIT manifest at pack time so it matches the published version ([#6](https://github.com/SimplySF/simply-cli/issues/6)) ([b967632](https://github.com/SimplySF/simply-cli/commit/b9676323d44f28e96df241e4772741babc2a5125))
+
 # [0.3.0](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.2.0...%40simplysf%2Fsimply-cli%400.3.0) (2026-09-11)
 
 ### Features
