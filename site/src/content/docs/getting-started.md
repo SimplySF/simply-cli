@@ -10,7 +10,7 @@ Node.js 22 or later. Nothing else.
 ## Install
 
 ```sh
-npm install -g @simplysf/simply-cli
+npm install @simplysf/simply-cli --global
 ```
 
 That is the only thing you install. The product CLIs — GitLab, Atlassian — are fetched the first
@@ -65,16 +65,13 @@ The first run of a not-yet-installed product does an npm install, which needs ne
 somewhere to write. In CI, a container image, or on an air-gapped machine, do it up front:
 
 ```sh
-npm install -g @simplysf/simply-cli
+npm install @simplysf/simply-cli --global
 simply plugins install @simplysf/simply-gitlab
 simply plugins install @simplysf/simply-atlassian
 ```
-
-In a Dockerfile that is three lines and every later invocation is offline-safe.
 
 ## Where to go next
 
 - **GitLab** — [get started](/gitlab/) · [commands](/gitlab/reference/)
 - **Atlassian** — [get started](/atlassian/) · [commands](/atlassian/reference/)
-- [Plugins](/guides/plugins/) — how installation on demand works, and how to pin or update a product
 - [MCP servers](/guides/mcp/) — give an AI agent the same capabilities
