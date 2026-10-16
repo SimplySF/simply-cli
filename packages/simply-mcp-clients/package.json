@@ -1,7 +1,7 @@
 {
   "name": "@simplysf/simply-mcp-clients",
   "description": "Installs an MCP server entry into MCP clients (Claude Code, Claude Desktop, Cursor, VS Code, Windsurf, Gemini CLI, Codex CLI) without disturbing the rest of their configuration",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "@ClayChipps",
   "homepage": "https://github.com/SimplySF/simply-cli",
   "bugs": "https://github.com/SimplySF/simply-cli/issues",
