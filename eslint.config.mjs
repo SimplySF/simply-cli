@@ -47,7 +47,7 @@ const compat = new FlatCompat({
 });
 
 // All published packages; every one carries the same Apache-2.0 header.
-const allPackages = ['packages/simply-cli'];
+const allPackages = ['packages/simply-cli', 'packages/simply-mcp-clients'];
 
 
 const headerRule = [
