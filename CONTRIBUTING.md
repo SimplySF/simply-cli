@@ -14,14 +14,13 @@ Thanks for your interest in contributing to Simply CLI! This document covers the
 
 ## Repository Structure
 
-This repository is a Lerna monorepo holding the host that owns the `simply` command, and the one library the MCP products share.
+This repository is a Lerna monorepo with a single package: the host that owns the `simply` command.
 Every package has its own `CONTRIBUTING.md` covering what is specific to it — read this file first,
 then that one.
 
-| Package                                                       | Description                                                                                                                                          |
-| ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`@simplysf/simply-cli`](packages/simply-cli)                 | The `simply` command: the JIT plugin hook, the plugin declarations, and nothing else                                                                 |
-| [`@simplysf/simply-mcp-clients`](packages/simply-mcp-clients) | Writes an MCP server entry into MCP clients' configuration; used by every product's `mcp install` (see [0003](docs/design/0003-mcp-client-setup.md)) |
+| Package                                       | Description                                                                          |
+| --------------------------------------------- | ------------------------------------------------------------------------------------ |
+| [`@simplysf/simply-cli`](packages/simply-cli) | The `simply` command: the JIT plugin hook, the plugin declarations, and nothing else |
 
 The product commands live in their own repos ([simply-atlassian](https://github.com/SimplySF/simply-atlassian),
 [simply-gitlab](https://github.com/SimplySF/simply-gitlab)) and are installed on demand. See
