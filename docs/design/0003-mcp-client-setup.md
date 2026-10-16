@@ -1,6 +1,6 @@
 # 0003 — Installing the MCP servers into MCP clients
 
-**Status:** Draft
+**Status:** In progress (`simply-mcp-clients` implemented; product commands follow its publish)
 **Package:** new `packages/simply-mcp-clients` here; `simply-atlassian-mcp`, `simply-gitlab-mcp`;
 this host's `jitPlugins` ranges
 **Date:** 2026-10-15
@@ -114,13 +114,19 @@ still proceed.
 
 Every file edit:
 
-- **Preserves everything else.** Edits go through `jsonc-parser`'s `modify`/`applyEdits`, which
-  touches only the one key and keeps comments, ordering, and indentation. VS Code's file is JSONC,
-  and Gemini's holds every other setting the person has.
+- **Preserves everything else.** Only the one entry's text changes. Every other byte stays as it was,
+  including comments, key order, trailing commas, and line endings. The new entry follows the file's
+  own indentation. VS Code's file is JSONC, and Gemini's holds every other setting the person has.
+  The file is parsed with `jsonc-parser`'s `parseTree`, and the inserter that writes the entry is
+  this package's own. `jsonc-parser`'s `modify` was the plan, but given formatting options it
+  reformats the neighbouring entry and moves a trailing `// comment` onto the new line. Without
+  them, it writes the new entry on a single line.
 - **Refuses an unparseable file** (exit 2, naming the file and the parse error) rather than
   replacing it.
 - **Creates the file and its directory** if absent — except where the directory's absence means the
-  client isn't installed, which is reported as such.
+  client isn't installed, which is reported as such. At user scope that directory is the client's
+  own (`~/.cursor`, `~/.gemini`, `~/.codeium/windsurf`, `Claude` and `Code` under the
+  application data directory). At project scope nothing is required.
 - **Keeps a backup** at `<file>.bak` before changing an existing file, and **writes atomically**
   (temp file and rename).
 
@@ -168,8 +174,12 @@ missing `--client` lists the choices anyway.
 ## Implementation plan
 
 1. `packages/simply-mcp-clients` here: `ServerSpec`, a `CLIENTS` table (paths per platform, honoring
-   `APPDATA`, `XDG_CONFIG_HOME`, `CODEX_HOME`), `planInstall(spec, client, scope, env) → Plan` (pure),
-   and `applyPlan(plan)`. Depends on `jsonc-parser`. Published before either product.
+   `APPDATA`, `XDG_CONFIG_HOME`, `CODEX_HOME`, `CLAUDE_CONFIG_DIR`), `planInstall(spec, client, scope, env) → Plan` (pure),
+   `applyPlan(plan, { force, dryRun })`, and `installServer` across several clients. It also
+   provides `buildLaunch` (the three launchers), `resolveEnvFile`, `exitCodeFor`,
+   `detectInstalledClients`, and the report text (`formatInstallReport`, `formatClientChoices`).
+   This keeps each product command to flag parsing. It depends on `jsonc-parser` and `cross-spawn`
+   (`claude` and `codex` are `.cmd` shims on Windows). Publish it before either product.
 2. `src/commands/<product>/mcp/install.ts` in each MCP package, building the `ServerSpec` and
    rendering results. Design-doc rows in each product repo pointing here, per their process.
 3. Product READMEs and `docs/guides/mcp-server.md`: lead with `mcp install`, keep the per-client
