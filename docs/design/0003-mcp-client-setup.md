@@ -1,8 +1,8 @@
 # 0003 — Installing the MCP servers into MCP clients
 
-**Status:** In progress (`simply-mcp-clients` implemented; product commands follow its publish)
-**Package:** new `packages/simply-mcp-clients` here; `simply-atlassian-mcp`, `simply-gitlab-mcp`;
-this host's `jitPlugins` ranges
+**Status:** In progress. The commands are in review in simply-atlassian and simply-gitlab, and
+`simply-mcp-clients` was removed before its first publish (see [Revised](#revised-a-copy-per-product)).
+**Package:** `simply-atlassian-mcp`, `simply-gitlab-mcp`; this host's `jitPlugins` ranges
 **Date:** 2026-10-15
 
 ## Problem
@@ -39,7 +39,7 @@ simply gitlab mcp install --client vscode --scope project
 
 The knowledge of the clients — where each keeps its file, what shape it wants, how to edit it
 without destroying what else is in it — lives **once**, in a new library package
-`@simplysf/simply-mcp-clients` in this repo. The two commands are thin: each describes its own
+`@simplysf/simply-mcp-clients` in this repo (since revised; see below). The two commands are thin: each describes its own
 server (name, launch arguments, which flags it forwards) and hands that to the library. This is
 0012's rule from `simply-atlassian` applied across repos: the client table changes every time a
 client moves a file, and two copies of it would drift in the first month.
@@ -146,6 +146,21 @@ The command exits with the highest contribution, after attempting every client. 
 ends with what to do next — restart Claude Desktop/Windsurf, `/mcp` in Claude Code — because
 nothing here can tell whether the client noticed.
 
+### Revised: a copy per product
+
+The library was built here (#23) and released as 0.2.0, but it was removed before its first publish.
+Each product now carries the same code in its MCP package, as `src/mcpClients` with its tests.
+(simply-atlassian's [0018](https://github.com/SimplySF/simply-atlassian/blob/main/docs/design/0018-mcp-install.md),
+simply-gitlab's [0010](https://github.com/SimplySF/simply-gitlab/blob/main/docs/design/0010-mcp-install.md).)
+
+This takes the alternative below, "duplicate the client module in each MCP package", and accepts
+the drift risk it names. In exchange there is no third package for both products to wait on, no
+release order across three repos, and no new npm package to publish and maintain. The two copies are
+identical apart from a header comment. Each product's `AGENTS.md` says to change both together, and
+`diff -r` between the two `src/mcpClients` directories shows whether they've drifted.
+
+Everything else in this doc, the behavior and how each client is edited, is unchanged.
+
 ## Alternatives considered
 
 **Duplicate the client module in each MCP package.** No new package and no release ordering. Rejected
@@ -173,13 +188,14 @@ missing `--client` lists the choices anyway.
 
 ## Implementation plan
 
-1. `packages/simply-mcp-clients` here: `ServerSpec`, a `CLIENTS` table (paths per platform, honoring
+1. ~~`packages/simply-mcp-clients` here~~ (now `src/mcpClients` in each MCP package; see
+   [Revised](#revised-a-copy-per-product)): `ServerSpec`, a `CLIENTS` table (paths per platform, honoring
    `APPDATA`, `XDG_CONFIG_HOME`, `CODEX_HOME`, `CLAUDE_CONFIG_DIR`), `planInstall(spec, client, scope, env) → Plan` (pure),
    `applyPlan(plan, { force, dryRun })`, and `installServer` across several clients. It also
    provides `buildLaunch` (the three launchers), `resolveEnvFile`, `exitCodeFor`,
    `detectInstalledClients`, and the report text (`formatInstallReport`, `formatClientChoices`).
    This keeps each product command to flag parsing. It depends on `jsonc-parser` and `cross-spawn`
-   (`claude` and `codex` are `.cmd` shims on Windows). Publish it before either product.
+   (`claude` and `codex` are `.cmd` shims on Windows).
 2. `src/commands/<product>/mcp/install.ts` in each MCP package, building the `ServerSpec` and
    rendering results. Design-doc rows in each product repo pointing here, per their process.
 3. Product READMEs and `docs/guides/mcp-server.md`: lead with `mcp install`, keep the per-client
