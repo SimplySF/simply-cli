@@ -10,12 +10,6 @@ The whole package is one hook. Read
 [`src/hooks/jit-plugin-not-installed.ts`](packages/simply-cli/src/hooks/jit-plugin-not-installed.ts)
 first; it is short, and its contract with oclif is the only subtle thing here.
 
-The one exception is [`packages/simply-mcp-clients`](packages/simply-mcp-clients), a plain library
-(no oclif, no stdout) that both MCP products' `mcp install` commands depend on from npm. It lives
-here because it belongs to neither product, and two copies of its client table would drift. It
-must be released **before** a product release that needs a change in it. See
-[`docs/design/0003`](docs/design/0003-mcp-client-setup.md).
-
 ## The contract with oclif, stated once
 
 When a command belongs to a declared `jitPlugins` entry that is not installed, oclif fires
