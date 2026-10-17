@@ -80,6 +80,25 @@ const GROUPS = {
 const BIN = 'simply';
 
 /**
+ * Standalone apps: packages that are run on their own with `npx` rather than installed as a plugin
+ * of the `simply` host, so they have no entry in `jitPlugins` and no command reference.
+ *
+ * Each is fetched by dist-tag, so the site shows the version `npx <package>@<tag>` would run today.
+ * Its `docs/` folder is copied as it is — getting started, the guides, and the `images/` they link
+ * to by relative path — so the same Markdown renders on GitHub and here.
+ */
+const APPS = [
+  {
+    slug: 'confluence-explorer',
+    title: 'Confluence Explorer',
+    blurb:
+      'A local web app for browsing Confluence, keeping a copy on disk, asking an AI about it, and improving pages.',
+    package: '@simplysf/simply-confluence-explorer',
+    tag: 'beta',
+  },
+];
+
+/**
  * Running npm is fiddlier on Windows than it looks, and both halves bite.
  *
  * Node refuses to spawn a `.cmd` shim without a shell (a deliberate security fix), so Windows needs
@@ -375,6 +394,85 @@ for (const product of PRODUCTS) {
     `${product.slug}: ${Object.keys(commands).length} commands, ${guides} guide(s), from ${specs
       .map((s) => `${s.split('/')[1]}@${versions[s]}`)
       .join(' + ')}`,
+  );
+}
+
+/** A page's `title` and `sidebar.order` from its frontmatter, so a landing page lists it by name and in order. */
+function frontmatterOf(file) {
+  const front = /^---\n([\s\S]*?)\n---/.exec(fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n'))?.[1] ?? '';
+  const title =
+    /^title: *(.+)$/m
+      .exec(front)?.[1]
+      .trim()
+      .replace(/^["']|["']$/g, '') ?? path.basename(file, '.md');
+  const order = Number(/^ {2}order: *(\d+)$/m.exec(front)?.[1] ?? Number.MAX_SAFE_INTEGER);
+  return { title, order };
+}
+
+for (const app of APPS) {
+  const appDir = path.join(outputRoot, app.slug);
+  fs.rmSync(appDir, { recursive: true, force: true });
+  const npx = `npx ${app.package}${app.tag === 'latest' ? '' : `@${app.tag}`}`;
+
+  let fetched;
+  try {
+    fetched = fetchPackage(app.package, app.tag, tmp);
+  } catch (error) {
+    // An app not yet published under its tag is not a broken build: the site still gets a landing
+    // page, and the guides appear on the first build after the package is published.
+    console.warn(`sync-products: ${app.package}@${app.tag} could not be fetched (${error.message.split('\n')[0]})`);
+  }
+
+  const docsDir = fetched ? path.join(fetched.dir, 'docs') : undefined;
+  if (docsDir && fs.existsSync(docsDir)) {
+    fs.cpSync(docsDir, appDir, { recursive: true });
+    for (const file of fs
+      .readdirSync(appDir, { recursive: true })
+      .map(String)
+      .filter((f) => f.endsWith('.md'))) {
+      const full = path.join(appDir, file);
+      fs.writeFileSync(full, rewriteLinks(fs.readFileSync(full, 'utf8'), app.slug));
+    }
+  } else if (fetched) {
+    console.warn(`sync-products: ${app.package}@${fetched.version} ships no docs/; its guides are missing`);
+  }
+
+  const guidesDir = path.join(appDir, 'guides');
+  const guideLinks = fs.existsSync(guidesDir)
+    ? fs
+        .readdirSync(guidesDir)
+        .filter((f) => f.endsWith('.md'))
+        .map((f) => ({ file: f, ...frontmatterOf(path.join(guidesDir, f)) }))
+        .sort((a, b) => a.order - b.order || a.title.localeCompare(b.title))
+        .map((g) => `- [${g.title}](/${app.slug}/guides/${g.file.replace(/\.md$/, '')}/)`)
+    : [];
+  const hasGettingStarted = fs.existsSync(path.join(appDir, 'getting-started.md'));
+
+  write(
+    path.join(appDir, 'index.md'),
+    frontmatter({ title: app.title, description: app.blurb, order: 0 }) +
+      [
+        app.blurb,
+        '',
+        'It runs on your own machine and opens in your browser. It needs Node.js 22 or later:',
+        '',
+        '```sh',
+        npx,
+        '```',
+        '',
+        ...(hasGettingStarted ? [`- [Get started](/${app.slug}/getting-started/)`] : []),
+        ...guideLinks,
+        '',
+        ...(fetched
+          ? []
+          : [`The guides for ${app.title} ship inside its package and appear here once it is published.`, '']),
+      ].join('\n'),
+  );
+
+  summary.push(
+    fetched
+      ? `${app.slug}: ${guideLinks.length} guide(s), from ${app.package.split('/')[1]}@${fetched.version}`
+      : `${app.slug}: not published yet; landing page only`,
   );
 }
 

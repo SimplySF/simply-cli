@@ -64,6 +64,25 @@ It reaches the site when the package is released.** The product repos say so in 
   under `/gitlab` or `/atlassian` exists here. A wrong edit link is worse than none, so generated
   pages omit it.
 
+## Standalone apps
+
+Not every SimplySF tool is a plugin of `simply`. Confluence Explorer
+(`@simplysf/simply-confluence-explorer`) is a web app that a person runs on their own with `npx`, so
+it has no entry in `jitPlugins` and no `oclif.manifest.json`. Its guides belong on this site all the
+same, because the site is where SimplySF's tools are documented.
+
+`sync-products.mjs` therefore keeps a second list, `APPS`, next to `PRODUCTS`. An app is fetched by
+npm dist-tag rather than by a host version range, because no host decides which version a reader has:
+the tag is what `npx <package>@<tag>` would run today. Its `docs/` folder is copied under
+`/{app}/` as it is: `getting-started.md`, the guides, and the `images/` they show by relative path,
+so the same Markdown renders on GitHub and here. The landing page lists the guides in the order their
+`sidebar.order` frontmatter gives, and shows the `npx` command in place of `simply`. There is no
+command reference.
+
+An app that is not published under its tag yet does not fail the build: the landing page is still
+generated, saying the guides appear once it is published. That keeps the landing page a link that
+host pages may make, by the same rule as a product's.
+
 ## The redirect
 
 Each product repo keeps a Pages deployment serving a two-file redirect (`index.html`, `404.html`)
