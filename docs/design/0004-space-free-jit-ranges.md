@@ -66,8 +66,10 @@ configuration.
 
 The real fix is quoting in `@oclif/plugin-plugins`' `spawn`. The same root cause broke installs
 when Node lived under `C:\Program Files`; oclif/plugin-plugins#1388 fixed that by quoting the Node
-path, but left the arguments unquoted. Once a release with that fix is the minimum for `@oclif/plugin-plugins` here, both
-halves of this workaround can be removed.
+path, but left the arguments unquoted. The argument quoting is proposed in
+[oclif/plugin-plugins#1412](https://github.com/oclif/plugin-plugins/pull/1412). Once a release
+containing it is the minimum `@oclif/plugin-plugins` here, both halves of this workaround can be
+removed.
 
 ## Alternatives considered
 
