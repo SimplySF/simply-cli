@@ -24,6 +24,7 @@
     "atlassian",
     "jira",
     "confluence",
+    "gemini",
     "simply"
   ],
   "license": "Apache-2.0",
@@ -52,6 +53,7 @@
     "jitPlugins": {
       "@simplysf/simply-atlassian": ">=0.11.0 <1.0.0",
       "@simplysf/simply-atlassian-mcp": ">=0.5.0 <1.0.0",
+      "@simplysf/simply-gemini": ">=0.1.0 <1.0.0",
       "@simplysf/simply-gitlab": ">=0.4.0 <1.0.0",
       "@simplysf/simply-gitlab-mcp": ">=0.4.0 <1.0.0"
     },
@@ -59,6 +61,9 @@
     "topics": {
       "atlassian": {
         "description": "Work with Atlassian products. Installed on first use."
+      },
+      "gemini": {
+        "description": "Manage Gemini CLI skills. Installed on first use."
       },
       "gitlab": {
         "description": "Work with GitLab. Installed on first use."

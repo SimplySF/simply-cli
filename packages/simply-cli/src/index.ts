@@ -16,7 +16,7 @@
 
 // This package is a CLI host, not a library. Its job is to own the `simply` command and to install
 // a product CLI the first time one of its commands is run; the commands themselves live in
-// @simplysf/simply-atlassian and @simplysf/simply-gitlab.
+// @simplysf/simply-atlassian, @simplysf/simply-gemini and @simplysf/simply-gitlab.
 //
 // The hook is the only code here. It is exported so it can be tested, and so a host embedding this
 // differently can reuse it.

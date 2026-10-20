@@ -46,6 +46,13 @@ const PRODUCTS = [
     mcp: '@simplysf/simply-gitlab-mcp',
     order: 2,
   },
+  {
+    slug: 'gemini',
+    title: 'Gemini',
+    blurb: 'Install and uninstall Gemini CLI skills from the sources you register.',
+    cli: '@simplysf/simply-gemini',
+    order: 3,
+  },
 ];
 
 /** How commands are grouped into reference pages, per product. First match wins. */
@@ -75,6 +82,7 @@ const GROUPS = {
     { match: 'gitlab:search', file: 'search', title: 'Search' },
     { match: 'gitlab:mcp', file: 'mcp', title: 'MCP server' },
   ],
+  gemini: [{ match: 'gemini:skills', file: 'skills', title: 'Skills' }],
 };
 
 const BIN = 'simply';
