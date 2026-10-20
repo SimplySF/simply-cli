@@ -82,7 +82,13 @@ importers:
       '@oclif/plugin-plugins':
         specifier: ^5.4.53
         version: 5.5.2(supports-color@8.1.1)
+      semver:
+        specifier: ^7.8.5
+        version: 7.8.5
     devDependencies:
+      '@types/semver':
+        specifier: ^7.8.0
+        version: 7.8.0
       '@vitest/coverage-v8':
         specifier: ^4.1.10
         version: 4.1.11(vitest@4.1.11)
@@ -2295,6 +2301,10 @@ packages:
   '@types/sax@1.2.7':
     resolution:
       { integrity: sha512-rO73L89PJxeYM3s3pPPjiPgVVcymqU490g0YO5n5By0k2Erzj6tay/4lr1CHAAU4JyOWd1rpQ8bCf6cZfHU96A== }
+
+  '@types/semver@7.8.0':
+    resolution:
+      { integrity: sha512-1mAINjtQCXXeLkJ9ehXkwOcBpqtLxiVtKhpUf83DdRNdQKV0iXZpaHYqRr7nj+wvxuJzoAmAwXI+sCNMv1CzLQ== }
 
   '@types/unist@2.0.11':
     resolution:
@@ -9139,6 +9149,8 @@ snapshots:
   '@types/sax@1.2.7':
     dependencies:
       '@types/node': 26.6.3
+
+  '@types/semver@7.8.0': {}
 
   '@types/unist@2.0.11': {}
 

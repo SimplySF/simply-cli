@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
+import fs from 'node:fs';
+import path from 'node:path';
 import process from 'node:process';
+import { fileURLToPath } from 'node:url';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import hook from '../src/hooks/jit-plugin-not-installed.js';
 
@@ -27,8 +30,21 @@ import hook from '../src/hooks/jit-plugin-not-installed.js';
 
 let stderr: string[];
 let restore: () => void;
+let fetched: string[];
+
+/** Stands in for the registry: answers every lookup with these published versions. */
+function registry(versions: string[] | Error): void {
+  vi.stubGlobal('fetch', async (url: string) => {
+    fetched.push(url);
+    if (versions instanceof Error) throw versions;
+    return new Response(JSON.stringify({ versions: Object.fromEntries(versions.map((v) => [v, {}])) }));
+  });
+}
 
 beforeEach(() => {
+  fetched = [];
+  // Unreachable unless a test says otherwise, so no test depends on the network.
+  registry(new Error('ENOTFOUND registry.npmjs.org'));
   stderr = [];
   const original = process.stderr.write.bind(process.stderr);
   vi.spyOn(process.stderr, 'write').mockImplementation((chunk: unknown) => {
@@ -43,6 +59,7 @@ beforeEach(() => {
 afterEach(() => {
   restore();
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
 });
 
 /** The slice of oclif's hook context this hook actually touches. */
@@ -114,5 +131,55 @@ describe('the jit_plugin_not_installed hook', () => {
   it('says which command triggered the install', async () => {
     await invoke(context(async () => undefined));
     expect(stderr.join('')).toMatch(/to run gitlab:mr:list/);
+  });
+});
+
+describe('the version it installs', () => {
+  // A spec with a space in it reaches npm as two arguments on Windows, and the second one installs
+  // the unrelated npm package `undefined`. These pin the hook to installing an exact version.
+
+  async function installed(): Promise<string[]> {
+    const argv: string[] = [];
+    await invoke(
+      context(async (_id, args) => {
+        argv.push(...args);
+        return undefined;
+      }),
+    );
+    return argv;
+  }
+
+  it('is the newest published version inside the declared range', async () => {
+    registry(['0.9.0', '1.0.0', '1.4.2', '1.5.0-beta.1', '2.0.0']);
+    expect(await installed()).toStrictEqual(['@simplysf/simply-gitlab@1.4.2']);
+  });
+
+  it('is looked up with the scope separator escaped, as the registry requires', async () => {
+    registry(['1.0.0']);
+    await installed();
+    expect(fetched).toStrictEqual(['https://registry.npmjs.org/@simplysf%2fsimply-gitlab']);
+  });
+
+  it('falls back to the declared range when the registry cannot be reached', async () => {
+    expect(await installed()).toStrictEqual(['@simplysf/simply-gitlab@^1.0.0']);
+  });
+
+  it('falls back to the declared range when nothing published satisfies it', async () => {
+    registry(['0.9.0']);
+    expect(await installed()).toStrictEqual(['@simplysf/simply-gitlab@^1.0.0']);
+  });
+});
+
+describe('the declared jitPlugins ranges', () => {
+  it('contain no whitespace', () => {
+    // `simply plugins update` hands these to npm verbatim, where the hook cannot intervene, so a
+    // space here brings the `undefined` package back on Windows. Use a space-free range such as `0.x`.
+    const pjson = JSON.parse(
+      fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'package.json'), 'utf8'),
+    ) as { oclif: { jitPlugins: Record<string, string> } };
+
+    for (const [name, range] of Object.entries(pjson.oclif.jitPlugins)) {
+      expect(range, name).not.toMatch(/\s/);
+    }
   });
 });

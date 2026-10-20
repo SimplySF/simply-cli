@@ -59,8 +59,10 @@ declared ranges.
 
 1. The product package must have no `bin` field, must set `oclif.bin` to `simply`, and must generate
    `oclif.manifest.json` in `prepack`.
-2. Add it to `oclif.jitPlugins` here with a version range, and add a `topics` entry so its topic has
-   a description in `simply --help`.
+2. Add it to `oclif.jitPlugins` here with a **space-free** version range (`0.x`, not
+   `>=0.1.0 <1.0.0`), and add a `topics` entry so its topic has a description in `simply --help`.
+   A space in the range makes npm on Windows install the unrelated package `undefined`; see
+   [`docs/design/0004`](docs/design/0004-space-free-jit-ranges.md). A test enforces it.
 3. Release it before releasing the host, or the host's manifest build cannot resolve it.
 
 Command ids must not collide across plugins. Each product roots its commands under its own topic

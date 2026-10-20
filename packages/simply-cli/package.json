@@ -51,11 +51,11 @@
       "@oclif/plugin-plugins"
     ],
     "jitPlugins": {
-      "@simplysf/simply-atlassian": ">=0.11.0 <1.0.0",
-      "@simplysf/simply-atlassian-mcp": ">=0.5.0 <1.0.0",
-      "@simplysf/simply-gemini": ">=0.1.0 <1.0.0",
-      "@simplysf/simply-gitlab": ">=0.4.0 <1.0.0",
-      "@simplysf/simply-gitlab-mcp": ">=0.4.0 <1.0.0"
+      "@simplysf/simply-atlassian": "0.x",
+      "@simplysf/simply-atlassian-mcp": "0.x",
+      "@simplysf/simply-gemini": "0.x",
+      "@simplysf/simply-gitlab": "0.x",
+      "@simplysf/simply-gitlab-mcp": "0.x"
     },
     "topicSeparator": " ",
     "topics": {
@@ -72,9 +72,11 @@
   },
   "dependencies": {
     "@oclif/core": "^4.11.2",
-    "@oclif/plugin-plugins": "^5.4.53"
+    "@oclif/plugin-plugins": "^5.4.53",
+    "semver": "^7.8.5"
   },
   "devDependencies": {
+    "@types/semver": "^7.8.0",
     "@vitest/coverage-v8": "^4.1.10",
     "oclif": "^4.23.0",
     "shx": "^0.4.0",
