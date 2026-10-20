@@ -85,13 +85,26 @@ The host declares which version of each product it will install:
 
 ```json
 "jitPlugins": {
-  "@simplysf/simply-atlassian": ">=0.11.0 <1.0.0",
-  "@simplysf/simply-gitlab": ">=0.4.0 <1.0.0"
+  "@simplysf/simply-atlassian": "0.x",
+  "@simplysf/simply-gitlab": "0.x"
 }
 ```
 
 A product can ship as many releases inside its range as it likes without the host moving. Leaving
 the range needs a host release, which is the one place the two are genuinely coupled.
+
+### Windows: an unexpected `undefined` package
+
+`simply` 0.4.0 and earlier, on Windows, also installed an unrelated npm package named `undefined`
+alongside each product, because of how the version range reached npm
+([design 0004](docs/design/0004-space-free-jit-ranges.md)). It was never loaded or run, but to
+remove it, upgrade `simply` and then run:
+
+```sh
+simply plugins reset --hard
+```
+
+That removes every installed product; each one reinstalls itself the next time you use it.
 
 ## Issues
 

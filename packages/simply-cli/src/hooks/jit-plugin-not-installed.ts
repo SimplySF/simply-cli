@@ -15,6 +15,40 @@
  */
 
 import { type Hook } from '@oclif/core';
+import { maxSatisfying, valid } from 'semver';
+
+/** How long the version lookup may take before the hook gives up on it and installs the range. */
+const LOOKUP_TIMEOUT_MS = 10_000;
+
+/**
+ * The newest published version of `name` inside `range`, or `undefined` if that cannot be found.
+ *
+ * This exists because of how `@oclif/plugin-plugins` runs npm on Windows: unquoted, with
+ * `windowsVerbatimArguments`, so a spec containing a space arrives as two arguments. A range like
+ * `>=0.1.0 <1.0.0` then installs the plugin *and* `<1.0.0`, which npm reads as a nameless range and
+ * resolves to the unrelated, deprecated package called `undefined`. The saved range breaks
+ * `simply plugins update` the same way. Installing an exact version keeps the argument space-free and
+ * makes plugin-plugins save that version rather than its normalised (spaced) form of the range.
+ *
+ * Any failure returns `undefined` and the caller installs the range as before: a lookup that fails
+ * here means the install about to run would most likely fail too, with a better message.
+ */
+async function resolveVersion(name: string, range: string): Promise<string | undefined> {
+  if (valid(range)) return range;
+  try {
+    const registry = (process.env.npm_config_registry ?? 'https://registry.npmjs.org').replace(/\/+$/, '');
+    const response = await fetch(`${registry}/${name.replace('/', '%2f')}`, {
+      // The abbreviated document: versions only, a fraction of the full packument.
+      headers: { accept: 'application/vnd.npm.install-v1+json' },
+      signal: AbortSignal.timeout(LOOKUP_TIMEOUT_MS),
+    });
+    if (!response.ok) return undefined;
+    const { versions } = (await response.json()) as { versions?: Record<string, unknown> };
+    return maxSatisfying(Object.keys(versions ?? {}), range) ?? undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 /**
  * Installs a product CLI the moment one of its commands is first run.
@@ -33,16 +67,20 @@ import { type Hook } from '@oclif/core';
  */
 const hook: Hook<'jit_plugin_not_installed'> = async function (options) {
   const { command, config, pluginName, pluginVersion } = options;
+  // The declared range, for the message a person would act on; the install itself uses the exact
+  // version when one can be found (see resolveVersion).
   const spec = `${pluginName}@${pluginVersion}`;
 
   // stderr, not stdout: a command's output is frequently piped into jq or a file, and a line about
   // installing a plugin has no business in it.
   process.stderr.write(`Installing ${pluginName} to run ${command.id} (first run only)…\n`);
 
+  const version = await resolveVersion(pluginName, pluginVersion);
+
   try {
     // Delegated to plugin-plugins rather than shelling out to npm, so the plugin lands in the same
     // place `simply plugins` manages and can be listed, updated, and removed like any other.
-    await config.runCommand('plugins:install', [spec]);
+    await config.runCommand('plugins:install', [`${pluginName}@${version ?? pluginVersion}`]);
   } catch (error) {
     const reason = error instanceof Error ? error.message : String(error);
     throw new Error(
