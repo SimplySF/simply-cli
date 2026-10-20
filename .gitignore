@@ -164,5 +164,6 @@ lib
 # Product documentation: downloaded from the published packages by
 # site/scripts/sync-products.mjs on every build. Never hand-edited, never committed.
 site/src/content/docs/atlassian/
+site/src/content/docs/gemini/
 site/src/content/docs/gitlab/
 site/public/schema/

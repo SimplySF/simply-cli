@@ -19,6 +19,7 @@ Each product reads its own settings, and each has its own credentials guide:
 | ------------------------ | ---------------------------------------------------- |
 | [GitLab](/gitlab/)       | `GITLAB_TOKEN` (`GITLAB_URL` defaults to gitlab.com) |
 | [Atlassian](/atlassian/) | `JIRA_URL`, `JIRA_USERNAME`, `JIRA_API_TOKEN`        |
+| [Gemini](/gemini/)       | No credentials; the `gemini` CLI on your PATH        |
 
 ## View Help
 
@@ -45,4 +46,5 @@ simply gitlab --help
 
 - **GitLab** — [get started](/gitlab/) · [commands](/gitlab/reference/)
 - **Atlassian** — [get started](/atlassian/) · [commands](/atlassian/reference/)
+- **Gemini** — [get started](/gemini/) · [commands](/gemini/reference/)
 - [MCP servers](/quick-start/mcp/) — give an AI agent the same capabilities

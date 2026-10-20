@@ -33,10 +33,11 @@ the products are plugins, so they coexist, and adding a third changes nothing ab
 | -------------------------------------------------------------------------------- | ---------------------------------------------------------- |
 | [`@simplysf/simply-atlassian`](https://github.com/SimplySF/simply-atlassian)     | `simply atlassian jira …`, `simply atlassian confluence …` |
 | [`@simplysf/simply-atlassian-mcp`](https://github.com/SimplySF/simply-atlassian) | `simply atlassian mcp`                                     |
+| [`@simplysf/simply-gemini`](https://github.com/SimplySF/simply-gemini)           | `simply gemini skills …`                                   |
 | [`@simplysf/simply-gitlab`](https://github.com/SimplySF/simply-gitlab)           | `simply gitlab …`                                          |
 | [`@simplysf/simply-gitlab-mcp`](https://github.com/SimplySF/simply-gitlab)       | `simply gitlab mcp`                                        |
 
-`simply --help` lists both topics whether or not they are installed — the command list ships with
+`simply --help` lists every topic whether or not they are installed — the command list ships with
 the host, so you can discover a command before anything is fetched.
 
 ## Installing ahead of time
@@ -96,8 +97,9 @@ the range needs a host release, which is the one place the two are genuinely cou
 
 Report anything about the `simply` command itself at
 https://github.com/SimplySF/simply-cli/issues. For a problem with a specific command, the product
-repo is the better place — [simply-atlassian](https://github.com/SimplySF/simply-atlassian/issues)
-or [simply-gitlab](https://github.com/SimplySF/simply-gitlab/issues).
+repo is the better place — [simply-atlassian](https://github.com/SimplySF/simply-atlassian/issues),
+[simply-gemini](https://github.com/SimplySF/simply-gemini/issues), or
+[simply-gitlab](https://github.com/SimplySF/simply-gitlab/issues).
 
 ## Documentation
 

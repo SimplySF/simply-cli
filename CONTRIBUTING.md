@@ -23,7 +23,7 @@ then that one.
 | [`@simplysf/simply-cli`](packages/simply-cli) | The `simply` command: the JIT plugin hook, the plugin declarations, and nothing else |
 
 The product commands live in their own repos ([simply-atlassian](https://github.com/SimplySF/simply-atlassian),
-[simply-gitlab](https://github.com/SimplySF/simply-gitlab)) and are installed on demand. See
+[simply-gemini](https://github.com/SimplySF/simply-gemini), [simply-gitlab](https://github.com/SimplySF/simply-gitlab)) and are installed on demand. See
 [AGENTS.md](AGENTS.md) for the contract between the host and a plugin.
 
 Tooling:
@@ -161,7 +161,7 @@ product it hosts.
 
 **Most of its content is not in this repo.** `site/scripts/sync-products.mjs` runs before every
 build (`prebuild`), downloads each product's **published** npm tarball, and generates the pages
-under `/gitlab/` and `/atlassian/` from the `oclif.manifest.json` and `docs/guides/` it finds
+under `/gitlab/`, `/atlassian/` and `/gemini/` from the `oclif.manifest.json` and `docs/guides/` it finds
 inside. Nothing under those paths is committed here, and editing it locally is pointless — the next
 build overwrites it. To change a product's docs, change them in that product's repo; they reach the
 site when that package is **released**. [`docs/design/0002`](docs/design/0002-combined-documentation-site.md)
@@ -183,7 +183,7 @@ Two rules the link check will otherwise catch for you in CI:
 - **Hand-written pages may only link to `/{product}/` and `/{product}/reference/`.** Those are
   generated on every build. A guide page is only there once that product has released it, so a link
   straight to one is a link this repo cannot keep working.
-- **Never hand-write a page under `/gitlab/` or `/atlassian/`.** It will be deleted on the next
+- **Never hand-write a page under `/gitlab/`, `/atlassian/` or `/gemini/`.** It will be deleted on the next
   sync.
 
 Root-relative links in markdown are rewritten with the `/simply-cli` base path by
