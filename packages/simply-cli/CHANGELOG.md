@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.3.1...%40simplysf%2Fsimply-cli%400.4.0) (2026-10-20)
+
+### Features
+
+- **simply-cli:** host simply-gemini as a JIT plugin ([#31](https://github.com/SimplySF/simply-cli/issues/31)) ([9f6491a](https://github.com/SimplySF/simply-cli/commit/9f6491a1434a62fd87185a7a5d16f96010b8dcfa))
+
 ## [0.3.1](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.3.0...%40simplysf%2Fsimply-cli%400.3.1) (2026-09-11)
 
 ### Bug Fixes
