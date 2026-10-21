@@ -63,7 +63,7 @@
         "description": "Work with Atlassian products. Installed on first use."
       },
       "gemini": {
-        "description": "Manage Gemini CLI skills. Installed on first use."
+        "description": "Manage Gemini CLI skills and subagents. Installed on first use."
       },
       "gitlab": {
         "description": "Work with GitLab. Installed on first use."

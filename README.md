@@ -33,7 +33,7 @@ the products are plugins, so they coexist, and adding a third changes nothing ab
 | -------------------------------------------------------------------------------- | ---------------------------------------------------------- |
 | [`@simplysf/simply-atlassian`](https://github.com/SimplySF/simply-atlassian)     | `simply atlassian jira …`, `simply atlassian confluence …` |
 | [`@simplysf/simply-atlassian-mcp`](https://github.com/SimplySF/simply-atlassian) | `simply atlassian mcp`                                     |
-| [`@simplysf/simply-gemini`](https://github.com/SimplySF/simply-gemini)           | `simply gemini skills …`                                   |
+| [`@simplysf/simply-gemini`](https://github.com/SimplySF/simply-gemini)           | `simply gemini skills …`, `simply gemini agents …`         |
 | [`@simplysf/simply-gitlab`](https://github.com/SimplySF/simply-gitlab)           | `simply gitlab …`                                          |
 | [`@simplysf/simply-gitlab-mcp`](https://github.com/SimplySF/simply-gitlab)       | `simply gitlab mcp`                                        |
 

@@ -18,7 +18,7 @@ export default defineConfig({
     starlight({
       title: 'Simply CLI',
       description:
-        "SimplySF's command-line tools under one command. GitLab and Atlassian from the terminal, with the same capabilities available to AI agents over MCP, plus Gemini CLI skill management. Install once; the product CLIs install themselves on first use.",
+        "SimplySF's command-line tools under one command. GitLab and Atlassian from the terminal, with the same capabilities available to AI agents over MCP, plus Gemini CLI skill and subagent management. Install once; the product CLIs install themselves on first use.",
       logo: {
         light: './src/assets/logo-icon.png',
         dark: './src/assets/logo-icon-dark.png',
