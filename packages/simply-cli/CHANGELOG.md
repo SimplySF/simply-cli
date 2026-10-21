@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.4.1...%40simplysf%2Fsimply-cli%400.5.0) (2026-10-21)
+
+### Features
+
+- **simply-cli:** host simply gemini agents ([#33](https://github.com/SimplySF/simply-cli/issues/33)) ([367cc64](https://github.com/SimplySF/simply-cli/commit/367cc645b81b5cc290da373377a8fc412d775d03))
+
 ## [0.4.1](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.4.0...%40simplysf%2Fsimply-cli%400.4.1) (2026-10-20)
 
 ### Bug Fixes
