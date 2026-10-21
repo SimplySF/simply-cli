@@ -49,7 +49,7 @@ const PRODUCTS = [
   {
     slug: 'gemini',
     title: 'Gemini',
-    blurb: 'Install and uninstall Gemini CLI skills from the sources you register.',
+    blurb: 'Install and uninstall Gemini CLI skills and subagents from the sources you register.',
     cli: '@simplysf/simply-gemini',
     order: 3,
   },
@@ -82,7 +82,10 @@ const GROUPS = {
     { match: 'gitlab:search', file: 'search', title: 'Search' },
     { match: 'gitlab:mcp', file: 'mcp', title: 'MCP server' },
   ],
-  gemini: [{ match: 'gemini:skills', file: 'skills', title: 'Skills' }],
+  gemini: [
+    { match: 'gemini:agents', file: 'agents', title: 'Subagents' },
+    { match: 'gemini:skills', file: 'skills', title: 'Skills' },
+  ],
 };
 
 const BIN = 'simply';
