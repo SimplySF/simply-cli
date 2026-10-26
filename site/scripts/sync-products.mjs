@@ -41,7 +41,7 @@ const PRODUCTS = [
   {
     slug: 'gitlab',
     title: 'GitLab',
-    blurb: 'Projects, merge requests, CI/CD, and configuration baselines.',
+    blurb: 'Projects, merge requests and merge trains, CI/CD, and configuration baselines.',
     cli: '@simplysf/simply-gitlab',
     mcp: '@simplysf/simply-gitlab-mcp',
     order: 2,
