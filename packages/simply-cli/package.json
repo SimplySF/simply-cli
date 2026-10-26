@@ -66,7 +66,7 @@
         "description": "Manage Gemini CLI skills and subagents. Installed on first use."
       },
       "gitlab": {
-        "description": "Work with GitLab. Installed on first use."
+        "description": "Work with GitLab, from merge requests and merge trains to CI/CD. Installed on first use."
       }
     }
   },
