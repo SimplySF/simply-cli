@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.5.0...%40simplysf%2Fsimply-cli%400.6.0) (2026-10-26)
+
+### Features
+
+- **simply-cli:** host simply gitlab mr merge ([#39](https://github.com/SimplySF/simply-cli/issues/39)) ([56f2f55](https://github.com/SimplySF/simply-cli/commit/56f2f551cd2e61a1ef26f16e0369507447d9e7fa))
+
 # [0.5.0](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.4.1...%40simplysf%2Fsimply-cli%400.5.0) (2026-10-21)
 
 ### Features
