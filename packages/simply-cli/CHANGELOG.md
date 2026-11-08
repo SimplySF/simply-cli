@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.3](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.6.2...%40simplysf%2Fsimply-cli%400.6.3) (2026-11-08)
+
+**Note:** Version bump only for package @simplysf/simply-cli
+
 ## [0.6.2](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.6.1...%40simplysf%2Fsimply-cli%400.6.2) (2026-11-08)
 
 ### Bug Fixes
