@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.2](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.6.1...%40simplysf%2Fsimply-cli%400.6.2) (2026-11-08)
+
+### Bug Fixes
+
+- **deps:** bump semver from 7.8.5 to 7.8.6 ([#45](https://github.com/SimplySF/simply-cli/issues/45)) ([d5aa1aa](https://github.com/SimplySF/simply-cli/commit/d5aa1aa238f45cb866a59b9b7d605d9d88e62d85))
+
 ## [0.6.1](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.6.0...%40simplysf%2Fsimply-cli%400.6.1) (2026-11-02)
 
 **Note:** Version bump only for package @simplysf/simply-cli
