@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.6.3...%40simplysf%2Fsimply-cli%400.7.0) (2026-11-12)
+
+### Features
+
+- **simply-cli:** host simply-atlassian 0.20 and simply-gitlab 0.12 ([#50](https://github.com/SimplySF/simply-cli/issues/50)) ([eb1e02d](https://github.com/SimplySF/simply-cli/commit/eb1e02d070d32648cd291115ee3bcc5ced0a6df9))
+
 ## [0.6.3](https://github.com/SimplySF/simply-cli/compare/%40simplysf%2Fsimply-cli%400.6.2...%40simplysf%2Fsimply-cli%400.6.3) (2026-11-08)
 
 **Note:** Version bump only for package @simplysf/simply-cli
