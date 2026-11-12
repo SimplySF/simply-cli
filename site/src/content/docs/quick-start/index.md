@@ -15,11 +15,15 @@ npm install @simplysf/simply-cli --global
 
 Each product reads its own settings, and each has its own credentials guide:
 
-| Product                  | Minimum                                              |
-| ------------------------ | ---------------------------------------------------- |
-| [GitLab](/gitlab/)       | `GITLAB_TOKEN` (`GITLAB_URL` defaults to gitlab.com) |
-| [Atlassian](/atlassian/) | `JIRA_URL`, `JIRA_USERNAME`, `JIRA_API_TOKEN`        |
-| [Gemini](/gemini/)       | No credentials; the `gemini` CLI on your PATH        |
+| Product                  | Minimum                                                            |
+| ------------------------ | ------------------------------------------------------------------ |
+| [GitLab](/gitlab/)       | `SIMPLY_GITLAB_TOKEN` (`SIMPLY_GITLAB_URL` defaults to gitlab.com) |
+| [Atlassian](/atlassian/) | `SIMPLY_JIRA_URL`, `SIMPLY_JIRA_USERNAME`, `SIMPLY_JIRA_API_TOKEN` |
+| [Gemini](/gemini/)       | No credentials; the `gemini` CLI on your PATH                      |
+
+The GitLab and Atlassian variables were renamed with a `SIMPLY_` prefix, so they no longer collide
+with other tools that read `GITLAB_TOKEN` or `JIRA_URL`. The unprefixed names still work for now,
+with a warning; each product's credentials guide lists the renames.
 
 ## View Help
 

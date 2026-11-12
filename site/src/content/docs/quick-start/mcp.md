@@ -60,8 +60,8 @@ Read tools only, unless you say otherwise:
 ```
 
 Pairing a read-only server with a write-capable one that uses a different credential file keeps the
-agent's normal loop structurally incapable of changing anything. `GITLAB_READ_ONLY` and
-`ATLASSIAN_READ_ONLY` refuse every write even with `--allow-writes` on.
+agent's normal loop structurally incapable of changing anything. `SIMPLY_GITLAB_READ_ONLY` and
+`SIMPLY_ATLASSIAN_READ_ONLY` refuse every write even with `--allow-writes` on.
 
 The layer that actually binds is a read-scoped token, which makes the instance refuse the write
 regardless of what any caller is persuaded to attempt.

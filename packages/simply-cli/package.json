@@ -60,7 +60,7 @@
     "topicSeparator": " ",
     "topics": {
       "atlassian": {
-        "description": "Work with Atlassian products. Installed on first use."
+        "description": "Work with Jira, Xray, and Confluence. Installed on first use."
       },
       "gemini": {
         "description": "Manage Gemini CLI skills and subagents. Installed on first use."
