@@ -58,6 +58,7 @@ const PRODUCTS = [
 /** How commands are grouped into reference pages, per product. First match wins. */
 const GROUPS = {
   atlassian: [
+    { match: 'atlassian:jira:xray', file: 'jira-xray', title: 'Jira — Xray' },
     { match: 'atlassian:jira:issue:comment', file: 'jira-issue-comments', title: 'Jira — Issue comments' },
     { match: 'atlassian:jira:issue:link', file: 'jira-issue-links', title: 'Jira — Issue links' },
     { match: 'atlassian:jira:issue', file: 'jira-issues', title: 'Jira — Issues' },
